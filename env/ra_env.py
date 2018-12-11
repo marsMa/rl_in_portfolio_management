@@ -1,5 +1,6 @@
 import gym
 import pandas as pd
+import numpy as np
 
 class ra_env(gym.Env):
     def __init__(self):
@@ -14,6 +15,10 @@ class ra_env(gym.Env):
         self.stock_price['trade_price']=self.stock_price['open']
         self.stock_price_col=self.stock_price.pivot_table(index='date',columns='Name',values='close')
         self.index_price=pd.read_csv('')
+
+        self.len=len(self.stock_price['name'].unique())
+        self.pfo=np.array([0])*self.len
+        self.state=self.price+self.pfo
         #timeindex 2 int
         self.time_step=self.stock_price['date'].sort().unique()
 
@@ -28,16 +33,12 @@ class ra_env(gym.Env):
 
     def find_state(time_step):
         
+        return 0
 
-    
-    #action to reward, state
     def step(self,action):
-        #action->switch portfolio
+        #action->switch portfolio; action to reward,state
         trade_list=action-self.pfo
         trade_fee=trade_list[trade_list>0].sum()*self.asset*self.fee_buy
-
-
-
 
         #change state
         self.time_step+=timedelta(day=1)
